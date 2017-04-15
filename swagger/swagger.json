@@ -1,0 +1,575 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "tripleS Home Automation API",
+        "version": "1.0.0",
+        "contact": {}
+    },
+    "basePath": "/v1/",
+    "paths": {
+        "/apis/admin/addDevice": {
+            "post": {
+                "tags": [
+                    "apis/admin"
+                ],
+                "summary": "Add device for user",
+                "operationId": "AdminController.AddDevice",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "auth",
+                        "description": "The api key",
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "The body content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AddDeviceInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "403": {
+                        "description": "code not found"
+                    }
+                }
+            }
+        },
+        "/apis/user/getAllDevice": {
+            "get": {
+                "tags": [
+                    "apis/user"
+                ],
+                "summary": "User get all device",
+                "operationId": "UserController.UserGetAllDevice",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "auth",
+                        "description": "token",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "$ref": "#/definitions/model.LDevice"
+                        }
+                    },
+                    "201": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/apis/user/getHistory": {
+            "get": {
+                "tags": [
+                    "apis/user"
+                ],
+                "summary": "User get history",
+                "operationId": "UserController.UserGetHistory",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "auth",
+                        "description": "The token key",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "hid",
+                        "description": "home_id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "limit",
+                        "description": "count of record",
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "in": "header",
+                        "name": "skip",
+                        "description": "skip",
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "$ref": "#/definitions/model.HistoryInfo"
+                        }
+                    },
+                    "201": {
+                        "description": "fail"
+                    },
+                    "401": {
+                        "description": "bad request"
+                    }
+                }
+            }
+        },
+        "/apis/user/getProfile": {
+            "get": {
+                "tags": [
+                    "apis/user"
+                ],
+                "summary": "Get profile user",
+                "operationId": "UserController.UserGetProfile",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "auth",
+                        "description": "The token key",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "400": {
+                        "description": "fail"
+                    }
+                }
+            }
+        },
+        "/apis/user/updatePassword": {
+            "post": {
+                "tags": [
+                    "apis/user"
+                ],
+                "summary": "Update password user",
+                "operationId": "UserController.UserUpdatePassword",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "auth",
+                        "description": "The token key",
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Update password input",
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdatePasswordForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "201": {
+                        "description": "update password fail"
+                    }
+                }
+            }
+        },
+        "/apis/user/updateProfile": {
+            "post": {
+                "tags": [
+                    "apis/user"
+                ],
+                "summary": "Get profile user",
+                "operationId": "UserController.UserUpdateProfile",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "auth",
+                        "description": "The token key",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "400": {
+                        "description": "fail"
+                    }
+                }
+            }
+        },
+        "/auth/forgetPassword/getCode": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Get code",
+                "operationId": "AuthController.GetCode",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "The body content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.GetCodeForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "100": {
+                        "description": "wrong format"
+                    },
+                    "200": {
+                        "description": "success"
+                    }
+                }
+            }
+        },
+        "/auth/forgetPassword/verifyCode": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Verify Code",
+                "operationId": "AuthController.VerifyCode",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "The object content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.VerifyCodeForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "403": {
+                        "description": "code not found"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "User Login",
+                "operationId": "AuthController.UserLogin",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "apikey",
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "100": {
+                        "description": "wrong format"
+                    },
+                    "104": {
+                        "description": "user not exist"
+                    },
+                    "200": {
+                        "schema": {
+                            "$ref": "#/definitions/model.LoginRsp"
+                        }
+                    },
+                    "410": {
+                        "description": "wrong password"
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Logout",
+                "operationId": "AuthController.Logout",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "auth",
+                        "description": "The token id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "401": {
+                        "description": "Token is expired"
+                    }
+                }
+            }
+        },
+        "/auth/tokenVerify": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Token verfiy",
+                "operationId": "AuthController.TokenVerify",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "auth",
+                        "description": "The token id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "100": {
+                        "description": "wrong format"
+                    },
+                    "200": {
+                        "description": "success"
+                    },
+                    "401": {
+                        "description": "token is expired"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.AddDeviceInput": {
+            "title": "AddDeviceInput",
+            "type": "object",
+            "properties": {
+                "list_device": {},
+                "uid": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Device": {
+            "title": "Device",
+            "type": "object",
+            "properties": {
+                "did": {
+                    "type": "string"
+                },
+                "dname": {
+                    "type": "string"
+                },
+                "hid": {
+                    "type": "string"
+                },
+                "roomid": {
+                    "type": "string"
+                },
+                "roomname": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "type": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "model.GetCodeForm": {
+            "title": "GetCodeForm",
+            "type": "object",
+            "properties": {
+                "uid": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.HistoryDevice": {
+            "title": "HistoryDevice",
+            "type": "object",
+            "properties": {
+                "did": {
+                    "type": "string"
+                },
+                "dname": {
+                    "type": "string"
+                },
+                "hid": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "time": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "type": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "uid": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.HistoryInfo": {
+            "title": "HistoryInfo",
+            "type": "object",
+            "properties": {
+                "ldevice": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.HistoryDevice"
+                    }
+                }
+            }
+        },
+        "model.LDevice": {
+            "title": "LDevice",
+            "type": "object",
+            "properties": {
+                "ldevice": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Device"
+                    }
+                },
+                "lhome": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Lhome"
+                    }
+                },
+                "permission": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Permission"
+                    }
+                },
+                "uid": {
+                    "type": "string"
+                },
+                "uname": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Lhome": {
+            "title": "Lhome",
+            "type": "object",
+            "properties": {
+                "hid": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "model.LoginRsp": {
+            "title": "LoginRsp",
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/model.UserInfo"
+                }
+            }
+        },
+        "model.Permission": {
+            "title": "Permission",
+            "type": "object",
+            "properties": {
+                "did": {
+                    "type": "string"
+                },
+                "hid": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UpdatePasswordForm": {
+            "title": "UpdatePasswordForm",
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "new_pwd": {
+                    "type": "string"
+                },
+                "old_pwd": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.User": {
+            "title": "User",
+            "type": "object",
+            "properties": {
+                "pwd": {
+                    "type": "string"
+                },
+                "uid": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserInfo": {
+            "title": "UserInfo",
+            "type": "object",
+            "properties": {
+                "uid": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.VerifyCodeForm": {
+            "title": "VerifyCodeForm",
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "uid": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "auth",
+            "description": "Operations about Auth\n"
+        },
+        {
+            "name": "apis/user",
+            "description": "Operations about user\n"
+        },
+        {
+            "name": "apis/admin",
+            "description": "Operations about user\n"
+        }
+    ]
+}
