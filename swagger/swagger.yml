@@ -326,8 +326,6 @@ definitions:
         type: string
       status:
         type: boolean
-      token:
-        type: string
   model.Permission:
     title: Permission
     type: object
@@ -358,6 +356,8 @@ definitions:
     title: UserInfo
     type: object
     properties:
+      token:
+        type: string
       uid:
         type: string
   model.VerifyCodeForm:

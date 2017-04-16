@@ -495,9 +495,6 @@
                 },
                 "status": {
                     "type": "boolean"
-                },
-                "token": {
-                    "type": "string"
                 }
             }
         },
@@ -544,6 +541,9 @@
             "title": "UserInfo",
             "type": "object",
             "properties": {
+                "token": {
+                    "type": "string"
+                },
                 "uid": {
                     "type": "string"
                 }

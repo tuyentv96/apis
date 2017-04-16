@@ -9,12 +9,12 @@ type LoginRsp struct {
 	Rcode int `json:"code"`
 	Message string `json:"message"`
 	UserInfo UserInfo `json:"data"`
-	Token string `json:"token"`
 	Status bool `json:"status"`
 }
 
 type UserInfo struct {
 	Uid string `json:"uid"`
+	Token string `json:"token"`
 	//UName string `json:"uname"`
 }
 type GetCodeForm struct {
