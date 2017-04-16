@@ -29,7 +29,7 @@ type AuthController struct {
 // @Param	body	body	models.User apikey
 // @Success 200 {object} models.LoginRsp
 // @Failure 100 wrong format
-// @Failure 104 user not exist
+// @Failure 402 user not exist
 // @Failure 410 wrong password
 // @router /login [post]
 func (c *AuthController) Post() {
@@ -48,7 +48,8 @@ func (c *AuthController) Post() {
 
 	if code,err:= user.FindByUid(uid); err{
 		// Wrong user
-		c.Data["json"]=models.Err(code)
+		print(code)
+		c.Data["json"]=models.Err(402)
 		c.Ctx.ResponseWriter.WriteHeader(402)
 		c.ServeJSON()
 		return

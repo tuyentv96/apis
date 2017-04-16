@@ -278,13 +278,13 @@
                     "100": {
                         "description": "wrong format"
                     },
-                    "104": {
-                        "description": "user not exist"
-                    },
                     "200": {
                         "schema": {
                             "$ref": "#/definitions/model.LoginRsp"
                         }
+                    },
+                    "402": {
+                        "description": "user not exist"
                     },
                     "410": {
                         "description": "wrong password"

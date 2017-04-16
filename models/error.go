@@ -15,7 +15,7 @@ func Err(errIn int) Error {
 	case 100:
 		return Error{Messeage: "wrong format"}
 		break
-	case 104:
+	case 402:
 		return Error{Messeage: "user not found"}
 		break
 
