@@ -266,12 +266,16 @@
                 "operationId": "AuthController.UserLogin",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
+                        "in": "formData",
+                        "name": "uid",
                         "description": "apikey",
-                        "schema": {
-                            "$ref": "#/definitions/model.User"
-                        }
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "pwd",
+                        "description": "apikey",
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -521,18 +525,6 @@
                     "type": "string"
                 },
                 "old_pwd": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.User": {
-            "title": "User",
-            "type": "object",
-            "properties": {
-                "pwd": {
-                    "type": "string"
-                },
-                "uid": {
                     "type": "string"
                 }
             }

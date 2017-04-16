@@ -26,18 +26,21 @@ type AuthController struct {
 
 // @Title UserLogin
 // @Summary User Login
-// @Param	body	body	models.User apikey
+// @Param	uid	formData	string apikey
+// @Param	pwd	formData	string apikey
 // @Success 200 {object} models.LoginRsp
 // @Failure 100 wrong format
 // @Failure 410 wrong password
 // @router /login [post]
 func (c *AuthController) Post() {
 	login_form:=models.LoginForm{}
-	if err:=json.Unmarshal(c.Ctx.Input.RequestBody, &login_form); err!=nil{
+	if err:= c.ParseForm(&login_form);err!=nil {
 		c.Ctx.ResponseWriter.WriteHeader(100)
 		c.ServeJSON()
 		return
+
 	}
+	print(login_form.Uid)
 	print(login_form.Uid,login_form.Pwd)
 
 	uid:= login_form.Uid
