@@ -48,10 +48,8 @@ func (c *AuthController) Post() {
 
 	if code,err:= user.FindByUid(uid); err{
 		// Wrong user
-		code=104
-		print("fail cmnr",code)
 		c.Data["json"]=models.Err(code)
-		c.Ctx.ResponseWriter.WriteHeader(code)
+		c.Ctx.ResponseWriter.WriteHeader(402)
 		c.ServeJSON()
 		return
 	}
