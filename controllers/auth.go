@@ -29,7 +29,6 @@ type AuthController struct {
 // @Param	body	body	models.User apikey
 // @Success 200 {object} models.LoginRsp
 // @Failure 100 wrong format
-// @Failure 402 user not exist
 // @Failure 410 wrong password
 // @router /login [post]
 func (c *AuthController) Post() {
@@ -85,7 +84,7 @@ func (c *AuthController) Post() {
 	user_info:=models.UserInfo{}
 	user_info.Uid=user.Uid
 
-	c.Data["json"]=models.LoginRsp{UserInfo: user_info,Token:t,Message: "Login successful"}
+	c.Data["json"]=models.LoginRsp{Rcode:200,UserInfo: user_info,Token:t,Message: "Login successful",Status:true}
 	c.ServeJSON()
 	return
 }
@@ -110,7 +109,7 @@ func (c *AuthController) PostTokenVerify() {
 		uid := fmt.Sprintf("%v",claims["uid"])
 		fmt.Printf(uid)
 		c.Ctx.ResponseWriter.WriteHeader(200)
-		c.Data["json"]=models.Message{"success"}
+		c.Data["json"]=models.Message{Rcode:200,Message: "success",Status:true}
 		c.ServeJSON()
 		return
 
@@ -173,7 +172,7 @@ func (o *AuthController) PostVerifyCode() {
 // @Failure 401 Token is expired
 // @router /logout [post]
 func (this *AuthController) PostLogout() {
-	this.Data["json"]=models.Message{"Logout successful"}
+	this.Data["json"]=models.Message{Rcode:200,Message:"Logout successful",Status:true}
 	this.ServeJSON()
 }
 

@@ -283,9 +283,6 @@
                             "$ref": "#/definitions/model.LoginRsp"
                         }
                     },
-                    "402": {
-                        "description": "user not exist"
-                    },
                     "410": {
                         "description": "wrong password"
                     }
@@ -431,7 +428,7 @@
             "title": "HistoryInfo",
             "type": "object",
             "properties": {
-                "ldevice": {
+                "devices": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.HistoryDevice"
@@ -443,13 +440,13 @@
             "title": "LDevice",
             "type": "object",
             "properties": {
-                "ldevice": {
+                "devices": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.Device"
                     }
                 },
-                "lhome": {
+                "homes": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.Lhome"
@@ -486,14 +483,21 @@
             "title": "LoginRsp",
             "type": "object",
             "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "data": {
+                    "$ref": "#/definitions/model.UserInfo"
+                },
                 "message": {
                     "type": "string"
                 },
+                "status": {
+                    "type": "boolean"
+                },
                 "token": {
                     "type": "string"
-                },
-                "user": {
-                    "$ref": "#/definitions/model.UserInfo"
                 }
             }
         },

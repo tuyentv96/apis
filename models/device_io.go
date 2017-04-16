@@ -7,5 +7,5 @@ type HistoryForm struct {
 }
 
 type HistoryInfo struct {
-	Ldevice     []HistoryDevice   `json:"ldevice"`
+	Ldevice     []HistoryDevice   `json:"devices"`
 }

@@ -21,11 +21,12 @@ func (u *UserController) GetAllDevice() {
 	uid:= GetUidByToken(u.Ctx.Request.Header.Get("auth"))
 
 	if uid=="" {
+		u.Data["json"]=models.Err(400)
 		u.Ctx.ResponseWriter.WriteHeader(400)
 		return
 	}
 
-	u.Data["json"]=models.MGetDevice(uid)
+	u.Data["json"]=models.GetAllDeviceRsp{Rcode:200,Data:models.MGetDevice(uid),Message:"Success",Status:true}
 
 	u.ServeJSON()
 	return
@@ -59,8 +60,7 @@ func (u *UserController) GetHisotory() {
 		u.ServeJSON()
 		return
 	}
-
-	u.Data["json"]=&models.HistoryInfo{Ldevice:ldevice}
+	u.Data["json"]=models.GetHistoryRsp{Rcode:200,Data:models.HistoryInfo{Ldevice:ldevice},Message:"Success",Status:true}
 	u.ServeJSON()
 	return
 

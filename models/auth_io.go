@@ -6,9 +6,11 @@ type LoginForm struct {
 	Pwd string `json:"pwd" bson:"pwd" form:"pwd"`
 }
 type LoginRsp struct {
+	Rcode int `json:"code"`
 	Message string `json:"message"`
-	UserInfo UserInfo `json:"user"`
+	UserInfo UserInfo `json:"data"`
 	Token string `json:"token"`
+	Status bool `json:"status"`
 }
 
 type UserInfo struct {
@@ -25,6 +27,8 @@ type VerifyCodeForm struct {
 }
 
 type Message struct {
+	Rcode int `json:"code"`
 	Message string `json:"message"`
+	Status bool `json:"status"`
 }
 

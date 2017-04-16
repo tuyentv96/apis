@@ -19,8 +19,8 @@ type Device struct {
 type LDevice struct {
 	UID   string `json:"uid"`
 	Uname string `json:"uname"`
-	Lhome []Lhome `json:"lhome"`
-	Ldevice []Device `json:"ldevice"`
+	Lhome []Lhome `json:"homes"`
+	Ldevice []Device `json:"devices"`
 	Permission []Permission `json:"permission"`
 }
 
