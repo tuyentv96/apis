@@ -51,14 +51,14 @@ func init() {
 	beego.GlobalControllerRouter["apis/controllers:TimerController"] = append(beego.GlobalControllerRouter["apis/controllers:TimerController"],
 		beego.ControllerComments{
 			Method: "Post",
-			Router: `/setDateTimer`,
+			Router: `/setTimer`,
 			AllowHTTPMethods: []string{"post"},
 			Params: nil})
 
 	beego.GlobalControllerRouter["apis/controllers:TimerController"] = append(beego.GlobalControllerRouter["apis/controllers:TimerController"],
 		beego.ControllerComments{
 			Method: "Get",
-			Router: `/getDateTimer`,
+			Router: `/getTimerByUid`,
 			AllowHTTPMethods: []string{"get"},
 			Params: nil})
 
@@ -72,7 +72,7 @@ func init() {
 	beego.GlobalControllerRouter["apis/controllers:TimerController"] = append(beego.GlobalControllerRouter["apis/controllers:TimerController"],
 		beego.ControllerComments{
 			Method: "PostDeleteTimer",
-			Router: `/deleteDateTimer`,
+			Router: `/deleteTimer`,
 			AllowHTTPMethods: []string{"post"},
 			Params: nil})
 

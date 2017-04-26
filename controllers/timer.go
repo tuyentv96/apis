@@ -21,7 +21,7 @@ type TimerController struct {
 // @Param	time	formData	int64 time
 // @Success 200
 // @Failure 201
-// @router /setDateTimer [post]
+// @router /setTimer [post]
 func (this *TimerController) Post() {
 	ret_val:= models.Response{Status:true,Rcode:200}
 	this.Data["json"]=&ret_val
@@ -51,15 +51,12 @@ func (this *TimerController) Post() {
 
 }
 
-// @Title getTimer
-// @Summary Get timer
+// @Title Get timer by uid
+// @Summary Get timer by uid
 // @Param	auth	header	string	"token"
-// @Param	did	header	string	device_id
-// @Param	skip	header	int32	skip
-// @Param	limit	header	int32	limit
 // @Success 200
 // @Failure 201 body is empty
-// @router /getDateTimer [get]
+// @router /getTimerByUid [get]
 func (this *TimerController) Get() {
 	ret_val:= models.Response{Status:true,Rcode:200}
 	this.Data["json"]=&ret_val
@@ -137,7 +134,7 @@ func (this *TimerController) GetTimer() {
 // @Param	timer_id	header	string	timer_id
 // @Success 200
 // @Failure 201 body is empty
-// @router /deleteDateTimer [post]
+// @router /deleteTimer [post]
 func (this *TimerController) PostDeleteTimer() {
 	ret_val:= models.Response{Status:true,Rcode:200}
 	this.Data["json"]=&ret_val
@@ -214,7 +211,7 @@ func (this *TimerController) PostDeleteCronTimer() {
 	this.Data["json"]=&ret_val
 
 	uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
-	timer_id:= this.Ctx.Request.Header.Get("timer_id")
+	timer_id:= this.GetString("timer_id")
 
 	if execute,err:= models.CheckTimerExcuteByTimerID(timer_id); err!=nil {
 		print("No timer id")
@@ -285,7 +282,7 @@ func (this *TimerController) PostStopCronTimer() {
 	ret_val:= models.Response{Status:true,Rcode:200}
 	this.Data["json"]=&ret_val
 
-	timer_id:= this.Ctx.Request.Header.Get("timer_id")
+	timer_id:= this.GetString("timer_id")
 
 	if enable,err:= models.CheckCronEnableByTimerID(timer_id); err!=nil {
 		print("No timer id")
@@ -328,7 +325,7 @@ func (this *TimerController) PostStartCronTimer() {
 	ret_val:= models.Response{Status:true,Rcode:200}
 	this.Data["json"]=&ret_val
 
-	timer_id:= this.Ctx.Request.Header.Get("timer_id")
+	timer_id:= this.GetString("timer_id")
 
 	if enable,err:= models.CheckCronEnableByTimerID(timer_id); err!=nil {
 		print("No timer id")
