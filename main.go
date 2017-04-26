@@ -7,6 +7,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"net/http"
 	"github.com/astaxie/beego/context"
+	mqtt "apis/models/mqtt"
 )
 
 
@@ -36,6 +37,7 @@ func RequireAuth(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	mqtt.InitMqtt()
 	if beego.BConfig.RunMode == "dev" {
 		beego.BConfig.WebConfig.DirectoryIndex = true
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"

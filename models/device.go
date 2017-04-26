@@ -57,6 +57,22 @@ func MGetHistoryDevice(hid string,skip int,limit int)  (record []HistoryDevice,c
 	return record,200,false
 }
 
+func FindDeviceByID(did string)  (Device,string){
+	Db := db.MgoDb{}
+	Db.Init()
+	defer Db.Close()
+	result := Device{}
+
+	if err := Db.C("devices").Find(bson.M{"did": did}).One(&result); err != nil {
+		print("Fail")
+		return result,"No device found"
+
+	}
+
+	return result,""
+
+}
+
 func MGetDevice(uid string)  LDevice{
 
 	Db := db.MgoDb{}

@@ -88,8 +88,9 @@ func (c *AuthController) Post() {
 	user_info.Uid=user.Uid
 	user_info.Token=t
 
-	c.Data["json"]=models.LoginRsp{Rcode:200,UserInfo: user_info,Message: "Login successful",Status:true}
-	c.ServeJSON()
+	//c.Data["xml"]=models.LoginRsp{Rcode:200,UserInfo: user_info,Message: "Login successful",Status:true}
+	x,_:=json.Marshal(models.LoginRsp{Rcode:200,UserInfo: user_info,Message: "Login successful",Status:true})
+	c.Ctx.Output.Body(x)
 	return
 }
 

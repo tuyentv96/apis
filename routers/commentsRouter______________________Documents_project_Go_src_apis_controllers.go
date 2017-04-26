@@ -48,6 +48,69 @@ func init() {
 			AllowHTTPMethods: []string{"post"},
 			Params: nil})
 
+	beego.GlobalControllerRouter["apis/controllers:TimerController"] = append(beego.GlobalControllerRouter["apis/controllers:TimerController"],
+		beego.ControllerComments{
+			Method: "Post",
+			Router: `/setDateTimer`,
+			AllowHTTPMethods: []string{"post"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:TimerController"] = append(beego.GlobalControllerRouter["apis/controllers:TimerController"],
+		beego.ControllerComments{
+			Method: "Get",
+			Router: `/getDateTimer`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:TimerController"] = append(beego.GlobalControllerRouter["apis/controllers:TimerController"],
+		beego.ControllerComments{
+			Method: "GetTimer",
+			Router: `/getTimerByDid`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:TimerController"] = append(beego.GlobalControllerRouter["apis/controllers:TimerController"],
+		beego.ControllerComments{
+			Method: "PostDeleteTimer",
+			Router: `/deleteDateTimer`,
+			AllowHTTPMethods: []string{"post"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:TimerController"] = append(beego.GlobalControllerRouter["apis/controllers:TimerController"],
+		beego.ControllerComments{
+			Method: "PostCreateCronTimer",
+			Router: `/setCronTimer`,
+			AllowHTTPMethods: []string{"post"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:TimerController"] = append(beego.GlobalControllerRouter["apis/controllers:TimerController"],
+		beego.ControllerComments{
+			Method: "PostDeleteCronTimer",
+			Router: `/deleteCronTimer`,
+			AllowHTTPMethods: []string{"post"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:TimerController"] = append(beego.GlobalControllerRouter["apis/controllers:TimerController"],
+		beego.ControllerComments{
+			Method: "GetCron",
+			Router: `/getCronTimer`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:TimerController"] = append(beego.GlobalControllerRouter["apis/controllers:TimerController"],
+		beego.ControllerComments{
+			Method: "PostStopCronTimer",
+			Router: `/stopCronTimer`,
+			AllowHTTPMethods: []string{"post"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:TimerController"] = append(beego.GlobalControllerRouter["apis/controllers:TimerController"],
+		beego.ControllerComments{
+			Method: "PostStartCronTimer",
+			Router: `/startCronTimer`,
+			AllowHTTPMethods: []string{"post"},
+			Params: nil})
+
 	beego.GlobalControllerRouter["apis/controllers:UserController"] = append(beego.GlobalControllerRouter["apis/controllers:UserController"],
 		beego.ControllerComments{
 			Method: "GetAllDevice",

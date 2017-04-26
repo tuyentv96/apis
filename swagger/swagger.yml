@@ -26,6 +26,82 @@ paths:
           description: success
         "403":
           description: code not found
+  /apis/timer/deleteTimer:
+    post:
+      tags:
+      - apis/timer
+      summary: Set timer
+      operationId: TimerController.setTimer
+      parameters:
+      - in: header
+        name: auth
+        description: token
+        type: string
+      - in: header
+        name: timer_id
+        description: timer_id
+        type: string
+      responses:
+        "200": {}
+        "201":
+          description: body is empty
+  /apis/timer/getTimer:
+    get:
+      tags:
+      - apis/timer
+      summary: Get timer
+      operationId: TimerController.getTimer
+      parameters:
+      - in: header
+        name: auth
+        description: token
+        type: string
+      - in: header
+        name: did
+        description: device_id
+        type: string
+      - in: header
+        name: skip
+        description: skip
+        type: integer
+        format: int32
+      - in: header
+        name: limit
+        description: limit
+        type: integer
+        format: int32
+      responses:
+        "200": {}
+        "201":
+          description: body is empty
+  /apis/timer/setTimer:
+    post:
+      tags:
+      - apis/timer
+      summary: setTimerByDate
+      operationId: TimerController.setTimerByDate
+      parameters:
+      - in: header
+        name: auth
+        description: token
+        type: string
+      - in: formData
+        name: devices
+        description: devices
+        type: string
+      - in: formData
+        name: status
+        description: status
+        type: integer
+        format: int64
+      - in: formData
+        name: time
+        description: time
+        type: integer
+        format: int64
+      responses:
+        "200": {}
+        "201": {}
   /apis/user/getAllDevice:
     get:
       tags:
@@ -371,5 +447,8 @@ tags:
   description: |
     Operations about user
 - name: apis/admin
+  description: |
+    Operations about user
+- name: apis/timer
   description: |
     Operations about user
