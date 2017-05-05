@@ -31,6 +31,11 @@ func init() {
 				&controllers.TimerController{},
 			),
 		),
+		beego.NSNamespace("/apis/power",
+			beego.NSInclude(
+				&controllers.PowerController{},
+			),
+		),
 	)
 
 	beego.AddNamespace(ns1)

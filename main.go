@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"github.com/astaxie/beego/context"
 	mqtt "apis/models/mqtt"
+	"github.com/astaxie/beego/plugins/cors"
 )
 
 
@@ -44,6 +45,13 @@ func main() {
 	}
 
 	beego.InsertFilter("v1/apis/*",beego.BeforeRouter,AuthJWT)
+			beego.InsertFilter("*", beego.BeforeRouter, cors.Allow(&cors.Options{
+				AllowOrigins:     []string{"*"},
+				AllowMethods: []string{"GET", "DELETE", "PUT", "PATCH", "OPTIONS"},
+				AllowHeaders: []string{"Origin", "Access-Control-Allow-Origin"},
+				ExposeHeaders: []string{"Content-Length", "Access-Control-Allow-Origin"},
+				AllowCredentials: true,
+			}))
 	beego.Run()
 }
 

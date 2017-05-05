@@ -48,6 +48,13 @@ func init() {
 			AllowHTTPMethods: []string{"post"},
 			Params: nil})
 
+	beego.GlobalControllerRouter["apis/controllers:PowerController"] = append(beego.GlobalControllerRouter["apis/controllers:PowerController"],
+		beego.ControllerComments{
+			Method: "GetDevice",
+			Router: `/getDevice`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
 	beego.GlobalControllerRouter["apis/controllers:TimerController"] = append(beego.GlobalControllerRouter["apis/controllers:TimerController"],
 		beego.ControllerComments{
 			Method: "Post",
