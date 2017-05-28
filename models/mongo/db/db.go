@@ -2,14 +2,7 @@ package db
 
 import (
 	"gopkg.in/mgo.v2"
-)
-
-const (
-	DatabaseUrl = "mongodb://localhost:27017"
-	Database     = "quanlynha"
-	AuthDatabase = "authdb"
-	AuthUserName = ""
-	AuthPassword = ""
+	conf "apis/conf"
 )
 
 
@@ -29,14 +22,14 @@ func init() {
 	if mainSession == nil {
 
 		var err error
-		mainSession, err = mgo.Dial(DatabaseUrl)
+		mainSession, err = mgo.Dial(conf.Mongodb_host)
 
 		if err != nil {
 			panic(err)
 		}
 
 		mainSession.SetMode(mgo.Monotonic, true)
-		mainDb = mainSession.DB(Database)
+		mainDb = mainSession.DB(conf.Mongodb_database)
 
 	}
 
@@ -45,13 +38,13 @@ func init() {
 func (this *MgoDb) Init() *mgo.Session {
 
 	this.Session = mainSession.Copy()
-	this.Db = this.Session.DB(Database)
+	this.Db = this.Session.DB(conf.Mongodb_database)
 
 	return this.Session
 }
 
 func (this *MgoDb) C(collection string) *mgo.Collection {
-	this.Col = this.Session.DB(Database).C(collection)
+	this.Col = this.Session.DB(conf.Mongodb_database).C(collection)
 	return this.Col
 }
 
@@ -61,16 +54,16 @@ func (this *MgoDb) Close() bool {
 }
 
 func (this *MgoDb) DropoDb() {
-	err := this.Session.DB(Database).DropDatabase()
+	err := this.Session.DB(conf.Mongodb_database).DropDatabase()
 	if err != nil {
 		panic(err)
 	}
 }
 
 func (this *MgoDb) RemoveAll(collection string) bool {
-	this.Session.DB(Database).C(collection).RemoveAll(nil)
+	this.Session.DB(conf.Mongodb_database).C(collection).RemoveAll(nil)
 
-	this.Col = this.Session.DB(Database).C(collection)
+	this.Col = this.Session.DB(conf.Mongodb_database).C(collection)
 	return true
 }
 

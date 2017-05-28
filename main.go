@@ -18,9 +18,8 @@ func AuthJWT(ctx *context.Context){
 	token, err := jwt.Parse(jwtString, func(token *jwt.Token) (interface{}, error) {
 		return []byte("secret123"), nil
 	})
-
 	if err == nil && token.Valid {
-		// token parsed, exp/nbf checks out, signature verified, Valid is true
+
 		return
 
 
@@ -30,6 +29,7 @@ func AuthJWT(ctx *context.Context){
 	}
 
 }
+
 
 
 func RequireAuth(w http.ResponseWriter, r *http.Request) {
@@ -44,14 +44,14 @@ func main() {
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
 	}
 
+
+	beego.InsertFilter("*", beego.BeforeRouter, cors.Allow(&cors.Options{
+		AllowOrigins:     []string{"*"},
+		AllowMethods: []string{"GET","POST"},
+		AllowHeaders:     []string{"Origin", "auth", "Access-Control-Allow-Origin","hid","did","timer_id","limit","skip"},
+		ExposeHeaders:    []string{"Content-Length", "Access-Control-Allow-Origin"},
+	}))
 	beego.InsertFilter("v1/apis/*",beego.BeforeRouter,AuthJWT)
-			beego.InsertFilter("*", beego.BeforeRouter, cors.Allow(&cors.Options{
-				AllowOrigins:     []string{"*"},
-				AllowMethods: []string{"GET", "DELETE", "PUT", "PATCH", "OPTIONS"},
-				AllowHeaders: []string{"Origin", "Access-Control-Allow-Origin"},
-				ExposeHeaders: []string{"Content-Length", "Access-Control-Allow-Origin"},
-				AllowCredentials: true,
-			}))
 	beego.Run()
 }
 

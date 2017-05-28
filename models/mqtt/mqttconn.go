@@ -6,6 +6,7 @@ import (
 	utils "apis/models/mqtt/api"
 	"os"
 	"time"
+	conf "apis/conf"
 )
 
 var topics  = map[string]byte{
@@ -48,7 +49,7 @@ func MqttPublishMessage(topic string,payload []byte)  {
 func InitMqtt()  {
 	cid:= string(string(time.Now().Unix())+utils.RandStringRunes(12))+"http"
 	print("cid:",cid)
-	opts := MQTT.NewClientOptions().AddBroker(utils.Mqttbroker)
+	opts := MQTT.NewClientOptions().AddBroker(conf.Mqtt_broker)
 	opts.SetClientID(cid)
 	opts.SetDefaultPublishHandler(mqttReceive)
 	opts.SetAutoReconnect(true)

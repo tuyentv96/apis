@@ -60,7 +60,9 @@ func (u *UserController) GetHisotory() {
 		u.ServeJSON()
 		return
 	}
-	u.Data["json"]=models.GetHistoryRsp{Rcode:200,Data:models.HistoryInfo{Ldevice:ldevice},Message:"Success",Status:true}
+
+	print("Len:",len(ldevice))
+	u.Data["json"]=models.GetHistoryRsp{Rcode:200,Data:models.HistoryInfo{Total:len(ldevice),Ldevice:ldevice},Message:"Success",Status:true}
 	u.ServeJSON()
 	return
 

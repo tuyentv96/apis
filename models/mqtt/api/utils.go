@@ -1,15 +1,10 @@
 package api
 
 import (
-
-
 	"math/rand"
 
 )
 
-const	(
-	Mqttbroker="tcp://192.168.99.100:1883"
-)
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 
