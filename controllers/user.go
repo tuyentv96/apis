@@ -258,12 +258,15 @@ func (this *UserController) GetHistoryByDidByTime() {
 // @Success 200 success
 // @Failure 201 update password fail
 // @router /updatePassword [post]
-func (c *UserController) PostUpdatePassword() {
-	uid:= c.Ctx.Request.Header.Get("uid")
+func (this *UserController) PostUpdatePassword() {
+	ret_val:= models.Response{Status:true,Rcode:200,Message:"Success"}
+	this.Data["json"]=&ret_val
 
-	c.Data["json"]=models.MGetDevice(uid)
+	uid:= this.Ctx.Request.Header.Get("uid")
 
-	c.ServeJSON()
+	this.Data["json"]=models.MGetDevice(uid)
+
+	this.ServeJSON()
 
 }
 
@@ -273,12 +276,27 @@ func (c *UserController) PostUpdatePassword() {
 // @Success 200 success
 // @Failure 400 fail
 // @router /getProfile [get]
-func (c *UserController) GetProfile() {
-	uid:= c.Ctx.Request.Header.Get("uid")
+func (this *UserController) GetProfile() {
+	uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
+	ret_val:= models.Response{Status:true,Rcode:200,Message:"Success"}
+	this.Data["json"]=&ret_val
 
-	c.Data["json"]=models.MGetDevice(uid)
+	data:= models.UserProfile{}
 
-	c.ServeJSON()
+	data,err:= models.GetProfileByUid(uid)
+
+	if  err!=nil{
+		ret_val.Message=err.Error()
+		ret_val.Status=false
+		ret_val.Rcode=400
+		this.ServeJSON()
+		return
+	}
+
+	ret_val.Data=data
+
+	this.ServeJSON()
+	return
 
 }
 
@@ -288,11 +306,36 @@ func (c *UserController) GetProfile() {
 // @Success 200 success
 // @Failure 400 fail
 // @router /updateProfile [post]
-func (c *UserController) PostUpdateProfile() {
-	uid:= c.Ctx.Request.Header.Get("uid")
+func (this *UserController) PostUpdateProfile() {
+	uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
+	ret_val:= models.Response{Status:true,Rcode:200,Message:"Success"}
+	this.Data["json"]=&ret_val
 
-	c.Data["json"]=models.MGetDevice(uid)
+	input:= models.UserProfile{}
 
-	c.ServeJSON()
+	if err:= this.ParseForm(&input);err!=nil {
+		ret_val.Message=err.Error()
+		ret_val.Status=false
+		ret_val.Rcode=100
+		this.ServeJSON()
+		return
+
+	}
+
+	input.Uid=uid
+
+	data,err:=models.UpdateUserProfile(input)
+
+	if err!=nil {
+		ret_val.Message=err.Error()
+		ret_val.Status=false
+		ret_val.Rcode=105
+		this.ServeJSON()
+		return
+	}
+
+	ret_val.Data=data
+
+	this.ServeJSON()
 
 }

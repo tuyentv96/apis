@@ -38,3 +38,12 @@ type MGetHomeData struct {
 	Homes []Home `json:"homes"`
 
 }
+
+type UserProfile struct {
+	Uid     string `json:"uid" bson:"uid" form:"uid"`
+	Uname     string `json:"uname" bson:"uname" form:"uname"`
+	Phone     string `json:"phone" bson:"phone" form:"phone"`
+	Address     string `json:"address" bson:"address" form:"address"`
+	Email    string `json:"email" bson:"email" form:"email"`
+
+}

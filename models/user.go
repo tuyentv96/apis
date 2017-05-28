@@ -5,6 +5,7 @@ import (
 	"apis/models/mongo/db"
 	"fmt"
 	"crypto/sha256"
+	"errors"
 )
 
 type User struct {
@@ -133,3 +134,39 @@ func MGetHome(uid string)  MGetHomeData{
 	return result
 }
 
+
+
+func GetProfileByUid(uid string) (UserProfile,error){
+	Db := db.MgoDb{}
+	Db.Init()
+	defer Db.Close()
+
+	u:= UserProfile{}
+
+	if err := Db.C("users").Find(bson.M{"uid": uid}).One(&u); err != nil {
+		print("Fail clgt")
+		return u,errors.New("Load fail")
+	}
+
+	println("Load success")
+	return u,nil
+
+}
+
+func UpdateUserProfile(u UserProfile) (UserProfile,error){
+	Db := db.MgoDb{}
+	Db.Init()
+	defer Db.Close()
+
+	// Update
+	colQuerier := bson.M{"uid": u.Uid}
+	change := bson.M{"$set": bson.M{"uname": u.Uname,"address": u.Address, "phone": u.Phone,"email": u.Email}}
+	err := Db.C("users").Update(colQuerier, change)
+	if err != nil {
+		return u,err
+	}
+
+	println("Load success")
+	return u,nil
+
+}
