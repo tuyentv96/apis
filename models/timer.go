@@ -11,6 +11,7 @@ import (
 type TimerDevice struct {
 	Hid     string `json:"hid" bson:"hid"`
 	Uid     string `json:"uid" bson:"uid"`
+	Timer_Name string `json:"timer_name" bson:"timer_name" form:"timer_name"`
 	Device     []Device `json:"device" bson:"device"`
 	Time int64 `json:"time" bson:"time"`
 	Execute bool `json:"execute" bson:"execute"`
@@ -21,6 +22,7 @@ type TimerDevice struct {
 type CronDevice struct {
 	Hid     string `json:"hid" bson:"hid"`
 	Uid     string `json:"uid" bson:"uid"`
+	Cron_Name string `json:"cron_name" bson:"cron_name" form:"cron_name"`
 	Device     []Device `json:"device" bson:"device"`
 	Time string `json:"time" bson:"time"`
 	Date string `json:"date" bson:"date"`
@@ -46,11 +48,59 @@ func FindListDeviceByID(data []DeviceInfo)  ([]Device){
 
 }
 
-func SaveTimerDevice(dev []Device,hid string,uid string,time_exp int64)  TimerDevice{
+func CheckTimerExisted(uid string,timer_name string,time int)  (bool) {
 	Db := db.MgoDb{}
 	Db.Init()
 	defer Db.Close()
-	result:=TimerDevice{Device: dev,Hid:hid,Uid:uid,Time:time_exp,Execute:false,TimerId:bson.NewObjectId().Hex(),Create_At:time.Now().Unix()}
+	//result:= TimerDevice{}
+
+	if count,err := Db.C("timer").Find(bson.M{"uid":uid,"$or":[]interface{}{
+		bson.M{"time": time},
+		bson.M{"timer_name": timer_name},
+	}}).Count(); err != nil {
+		print("No recode found")
+		return true
+	} else {
+		print("Record:",count)
+		if count>0 {
+			return true
+		}
+
+	}
+	return false
+
+
+}
+
+func CheckCronExisted(uid string,cron_name string,time string)  (bool) {
+	Db := db.MgoDb{}
+	Db.Init()
+	defer Db.Close()
+	//result:= TimerDevice{}
+
+	if count,err := Db.C("cron").Find(bson.M{"uid":uid,"$or":[]interface{}{
+		bson.M{"time": time},
+		bson.M{"timer_name": cron_name},
+	}}).Count(); err != nil {
+		print("No recode found")
+		return true
+	} else {
+		print("Record:",count)
+		if count>0 {
+			return true
+		}
+
+	}
+	return false
+
+
+}
+
+func SaveTimerDevice(dev []Device,timer_name string,hid string,uid string,time_exp int64)  TimerDevice{
+	Db := db.MgoDb{}
+	Db.Init()
+	defer Db.Close()
+	result:=TimerDevice{Timer_Name:timer_name,Device: dev,Hid:hid,Uid:uid,Time:time_exp,Execute:false,TimerId:bson.NewObjectId().Hex(),Create_At:time.Now().Unix()}
 
 	if err := Db.C("timer").Insert(result); err != nil {
 		print("Fail")
@@ -137,11 +187,11 @@ func UpdateStatusTimer(timer_id string)  bool{
 	return false
 }
 
-func SaveCronDevice(dev []Device,hid string,uid string,_time string,date string)  CronDevice{
+func SaveCronDevice(dev []Device,cron_name string,hid string,uid string,_time string,date string)  CronDevice{
 	Db := db.MgoDb{}
 	Db.Init()
 	defer Db.Close()
-	result:=CronDevice{Device: dev,Hid:hid,Uid:uid,Time: _time,Enable: true,TimerId:bson.NewObjectId().Hex(),Create_At:time.Now().Unix()}
+	result:=CronDevice{Cron_Name:cron_name,Device: dev,Hid:hid,Uid:uid,Time: _time,Enable: true,TimerId:bson.NewObjectId().Hex(),Create_At:time.Now().Unix()}
 
 	if err := Db.C("cron").Insert(result); err != nil {
 		print("Fail")

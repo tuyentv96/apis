@@ -44,7 +44,7 @@ type HistoryDevice struct {
 	Time int64 `json:"time" bson:"time"`
 }
 
-func MGetHistoryDevice(hid string,skip int,limit int)  (record []HistoryDevice,code int,error bool){
+func MGetHistoryHome(hid string,skip int,limit int)  (record []HistoryDevice,code int,error bool){
 	Db := db.MgoDb{}
 	Db.Init()
 	defer Db.Close()
@@ -54,6 +54,45 @@ func MGetHistoryDevice(hid string,skip int,limit int)  (record []HistoryDevice,c
 		return record,400,true
 	}
 	print("Succc",record,"+++",hid,skip,limit)
+	return record,200,false
+}
+
+func MGetHistoryHomeByTime(hid string,skip int,limit int,time_start int,time_end int)  (record []HistoryDevice,code int,error bool){
+	Db := db.MgoDb{}
+	Db.Init()
+	defer Db.Close()
+
+	if err := Db.C("history").Find(bson.M{"hid": hid,"time": bson.M{"$gte": time_start, "$lte": time_end} }).Limit(limit).Skip(skip).Sort("-time").All(&record); err != nil {
+		print("Fail")
+		return record,400,true
+	}
+	print("Succc",record,"+++",hid,skip,limit)
+	return record,200,false
+}
+
+func MGetHistoryDevice(did string,skip int,limit int)  (record []HistoryDevice,code int,error bool){
+	Db := db.MgoDb{}
+	Db.Init()
+	defer Db.Close()
+
+	if err := Db.C("history").Find(bson.M{"did": did}).Limit(limit).Skip(skip).Sort("-time").All(&record); err != nil {
+		print("Fail")
+		return record,400,true
+	}
+	print("Succc",record,"+++",did,skip,limit)
+	return record,200,false
+}
+
+func MGetHistoryDeviceByTime(did string,skip int,limit int,time_start int,time_end int)  (record []HistoryDevice,code int,error bool){
+	Db := db.MgoDb{}
+	Db.Init()
+	defer Db.Close()
+
+	if err := Db.C("history").Find(bson.M{"did": did,"time": bson.M{"$gte": time_start, "$lte": time_end} }).Limit(limit).Skip(skip).Sort("-time").All(&record); err != nil {
+		print("Fail")
+		return record,400,true
+	}
+	print("Succc",record,"+++",did,skip,limit)
 	return record,200,false
 }
 

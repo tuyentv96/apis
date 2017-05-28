@@ -16,9 +16,10 @@ type TimerController struct {
 // @Title setTimerByDate
 // @Summary setTimerByDate
 // @Param	auth	header	string	"token"
+// @Param	timer_name	formData	string timer_name
 // @Param	devices	formData	string devices
 // @Param	status	formData	int status
-// @Param	time	formData	int64 time
+// @Param	time	formData	int time
 // @Success 200
 // @Failure 201
 // @router /setTimer [post]
@@ -38,11 +39,27 @@ func (this *TimerController) Post() {
 	}
 	set_timer_input.Uid=uid
 
+	if set_timer_input.Timer_Name=="" || set_timer_input.Uid==""{
+		ret_val.Rcode=103
+		ret_val.Message="Please fill in all fields"
+		this.ServeJSON()
+		return
+	}
+
+	if existed:= models.CheckTimerExisted(set_timer_input.Uid,set_timer_input.Timer_Name,int(set_timer_input.Time));existed==true{
+		ret_val.Rcode=312
+		ret_val.Message="Timer existed"
+		this.ServeJSON()
+		return
+	}
+
 	json.Unmarshal([]byte(this.GetString("devices")),&set_timer_input.Devices)
 	fmt.Printf("%+v",set_timer_input,this.GetString("devices"))
 
+
+
 	list_dev:= models.FindListDeviceByID(set_timer_input.Devices)
-	ret:=models.SaveTimerDevice(list_dev,"H1",set_timer_input.Uid,set_timer_input.Time)
+	ret:=models.SaveTimerDevice(list_dev,set_timer_input.Timer_Name,"H1",set_timer_input.Uid,set_timer_input.Time)
 	service.DoStuff(list_dev,set_timer_input.Hid,set_timer_input.Uid,set_timer_input.Time,ret.TimerId)
 
 	ret_val.Data=ret
@@ -184,11 +201,25 @@ func (this *TimerController) PostCreateCronTimer() {
 
 	set_timer_input.Uid=uid
 
+	if set_timer_input.Cron_Name=="" || set_timer_input.Uid=="" || set_timer_input.Time==""{
+		ret_val.Rcode=103
+		ret_val.Message="Please fill in all fields"
+		this.ServeJSON()
+		return
+	}
+
+	if existed:= models.CheckCronExisted(set_timer_input.Uid,set_timer_input.Cron_Name,set_timer_input.Time); existed==true{
+		ret_val.Rcode=312
+		ret_val.Message="Cron existed"
+		this.ServeJSON()
+		return
+	}
+
 	json.Unmarshal([]byte(this.GetString("devices")),&set_timer_input.Devices)
 	fmt.Printf("%+v",set_timer_input,this.GetString("devices"))
 
 	list_dev:= models.FindListDeviceByID(set_timer_input.Devices)
-	ret:=models.SaveCronDevice(list_dev,"H1",set_timer_input.Uid,set_timer_input.Time,set_timer_input.Date)
+	ret:=models.SaveCronDevice(list_dev,set_timer_input.Cron_Name,"H1",set_timer_input.Uid,set_timer_input.Time,set_timer_input.Date)
 	service.CronDoStuff(list_dev,set_timer_input.Hid,set_timer_input.Uid,set_timer_input.Time,set_timer_input.Date,ret.TimerId)
 
 	ret_val.Data=ret

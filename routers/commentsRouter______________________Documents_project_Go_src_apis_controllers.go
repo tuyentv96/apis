@@ -142,7 +142,28 @@ func init() {
 	beego.GlobalControllerRouter["apis/controllers:UserController"] = append(beego.GlobalControllerRouter["apis/controllers:UserController"],
 		beego.ControllerComments{
 			Method: "GetHisotory",
-			Router: `/getHistory`,
+			Router: `/getHistoryHome`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:UserController"] = append(beego.GlobalControllerRouter["apis/controllers:UserController"],
+		beego.ControllerComments{
+			Method: "GetHisotoryByTime",
+			Router: `/getHistoryHomeByTime`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:UserController"] = append(beego.GlobalControllerRouter["apis/controllers:UserController"],
+		beego.ControllerComments{
+			Method: "GetHistoryByDid",
+			Router: `/getHistoryDevice`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:UserController"] = append(beego.GlobalControllerRouter["apis/controllers:UserController"],
+		beego.ControllerComments{
+			Method: "GetHistoryByDidByTime",
+			Router: `/getHistoryDeviceByTime`,
 			AllowHTTPMethods: []string{"get"},
 			Params: nil})
 
