@@ -62,3 +62,74 @@ func (u *User) ClearPass() {
 	u.Pwd=""
 }
 
+func MGetDeviceByHid(uid string,hid string)  []Device{
+
+	Db := db.MgoDb{}
+	Db.Init()
+	defer Db.Close()
+	user_data := LDevice{}
+	result:= []Device{}
+
+
+	if err := Db.C("users").Find(bson.M{"uid": uid}).One(&user_data); err != nil {
+		print("Fail")
+		return result
+
+	}
+
+	home_owner:=false
+
+	for i:=0;i<len(user_data.Lhome);i++ {
+		if user_data.Lhome[i].Hid == hid{
+			home_owner=true
+		}
+	}
+
+	if home_owner==false {
+		print("User not owner home !!!")
+		return result
+	}
+
+	//fmt.Print("BSSS",lh)
+	if err1 := Db.C("devices").Find(bson.M{"hid": hid}).Sort("dname").All(&result); err1 != nil {
+		print("Fail")
+		return result
+
+	}
+
+
+	return result
+}
+
+func MGetHome(uid string)  MGetHomeData{
+
+	Db := db.MgoDb{}
+	Db.Init()
+	defer Db.Close()
+	result := MGetHomeData{}
+
+	data:= LDevice{}
+
+
+	if err := Db.C("users").Find(bson.M{"uid": uid}).One(&data); err != nil {
+		print("Fail")
+		return result
+
+	}
+	homes:= []Home{}
+	home:= Home{}
+
+	for i:=0;i<len(data.Lhome);i++ {
+		if err := Db.C("homes").Find(bson.M{"hid": data.Lhome[i].Hid}).One(&home); err != nil {
+			print("Fail")
+		}
+		homes=append(homes,home)
+
+	}
+
+	result.Total=len(data.Lhome)
+	result.Homes=homes
+
+	return result
+}
+

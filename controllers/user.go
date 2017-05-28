@@ -16,6 +16,34 @@ type UserController struct {
 // @Param	auth	header	string	"token"
 // @Success 200 {object} models.LDevice
 // @Failure 201 body is empty
+// @router /getAllHome [get]
+func (this *UserController) GetAllHome() {
+	ret_val:= models.Response{Status:true,Rcode:200,Message:"Get home success"}
+	this.Data["json"]=&ret_val
+	uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
+
+	if uid=="" {
+		ret_val.Rcode=400
+		ret_val.Message="User not found"
+		ret_val.Status=false
+		this.ServeJSON()
+		return
+	}
+
+	ret_val.Data=models.MGetHome(uid)
+
+	this.ServeJSON()
+	return
+
+}
+
+
+
+// @Title UserGetAllDevice
+// @Summary User get all device
+// @Param	auth	header	string	"token"
+// @Success 200 {object} models.LDevice
+// @Failure 201 body is empty
 // @router /getAllDevice [get]
 func (u *UserController) GetAllDevice() {
 	uid:= GetUidByToken(u.Ctx.Request.Header.Get("auth"))
@@ -29,6 +57,39 @@ func (u *UserController) GetAllDevice() {
 	u.Data["json"]=models.GetAllDeviceRsp{Rcode:200,Data:models.MGetDevice(uid),Message:"Success",Status:true}
 
 	u.ServeJSON()
+	return
+
+}
+
+// @Title UserGetAllDevice by hid
+// @Summary User get all device by hid
+// @Param	auth	header	string	"token"
+// @Param	hid	header	string	"hid"
+// @Success 200 {object} models.LDevice
+// @Failure 201 body is empty
+// @router /getAllDeviceByHid [get]
+func (this *UserController) GetAllDeviceByHid() {
+	ret_val:= models.Response{Status:true,Rcode:200,Message:"Get home success"}
+	this.Data["json"]=&ret_val
+
+
+	uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
+	hid:= this.Ctx.Request.Header.Get("hid")
+
+	println("Hid:",hid)
+	if uid=="" {
+		ret_val.Rcode=400
+		ret_val.Message="User not found"
+		ret_val.Status=false
+		this.ServeJSON()
+		return
+	}
+
+	data:=models.MGetDeviceByHid(uid,hid)
+
+	ret_val.Data=models.MGetDeviceByHidData{Total:len(data),Devices:data}
+
+	this.ServeJSON()
 	return
 
 }

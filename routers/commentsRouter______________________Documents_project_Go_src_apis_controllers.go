@@ -120,8 +120,22 @@ func init() {
 
 	beego.GlobalControllerRouter["apis/controllers:UserController"] = append(beego.GlobalControllerRouter["apis/controllers:UserController"],
 		beego.ControllerComments{
+			Method: "GetAllHome",
+			Router: `/getAllHome`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:UserController"] = append(beego.GlobalControllerRouter["apis/controllers:UserController"],
+		beego.ControllerComments{
 			Method: "GetAllDevice",
 			Router: `/getAllDevice`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:UserController"] = append(beego.GlobalControllerRouter["apis/controllers:UserController"],
+		beego.ControllerComments{
+			Method: "GetAllDeviceByHid",
+			Router: `/getAllDeviceByHid`,
 			AllowHTTPMethods: []string{"get"},
 			Params: nil})
 

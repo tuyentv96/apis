@@ -10,7 +10,7 @@ type UpdatePasswordForm struct {
 type GetAllDeviceRsp struct {
 	Rcode int `json:"code"`
 	Message string `json:"message"`
-	Data LDevice `json:"data"`
+	Data interface{} `json:"data"`
 	Status bool `json:"status"`
 }
 
@@ -21,3 +21,20 @@ type GetHistoryRsp struct {
 	Status bool `json:"status"`
 }
 
+type MGetDeviceByHidData struct {
+	Total int `json:"total"`
+	Devices []Device `json:"devices"`
+}
+
+type Home struct {
+	Hid string `json:"hid"`
+	Home_Name string `json:"home_name"`
+	Address string `json:"address"`
+	Phone string `json:"phone"`
+}
+
+type MGetHomeData struct {
+	Total int `json:"total"`
+	Homes []Home `json:"homes"`
+
+}
