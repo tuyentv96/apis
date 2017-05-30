@@ -198,12 +198,13 @@ func (this *PowerController) GetHomePowerInYear() {
 	}
 	print(ldevice)
 
-	data:= models.GetDevicePowerOneOutput{}
+	data:= models.PowerOutput{}
 
 	data.Uid=uid
 	data.Total=len(ldevice)
+	data.Devices=ldevice
 
-	ret_val.Data=ldevice
+	ret_val.Data=data
 
 	this.ServeJSON()
 	return
@@ -242,12 +243,13 @@ func (this *PowerController) GetHomePowerInYearBy() {
 	}
 	print(ldevice)
 
-	data:= models.GetDevicePowerOneOutput{}
+	data:= models.PowerOutput{}
 
 	data.Uid=uid
 	data.Total=len(ldevice)
+	data.Devices=ldevice
 
-	ret_val.Data=ldevice
+	ret_val.Data=data
 
 	this.ServeJSON()
 	return
@@ -286,12 +288,13 @@ func (this *PowerController) GetHomePowerInMonthByDate() {
 	}
 	print(ldevice)
 
-	data:= models.GetDevicePowerOneOutput{}
+	data:= models.PowerOutput{}
 
 	data.Uid=uid
 	data.Total=len(ldevice)
+	data.Devices=ldevice
 
-	ret_val.Data=ldevice
+	ret_val.Data=data
 
 	this.ServeJSON()
 	return
@@ -332,12 +335,13 @@ func (this *PowerController) GetDevicePowerInMonthByDate() {
 	}
 	print(ldevice)
 
-	data:= models.GetDevicePowerOneOutput{}
+	data:= models.PowerOutput{}
 
 	data.Uid=uid
 	data.Total=len(ldevice)
+	data.Devices=ldevice
 
-	ret_val.Data=ldevice
+	ret_val.Data=data
 
 	this.ServeJSON()
 	return
@@ -377,12 +381,13 @@ func (this *PowerController) GetDevicePowerInYearByMonth() {
 	}
 	print(ldevice)
 
-	data:= models.GetDevicePowerOneOutput{}
+	data:= models.PowerOutput{}
 
 	data.Uid=uid
 	data.Total=len(ldevice)
+	data.Devices=ldevice
 
-	ret_val.Data=ldevice
+	ret_val.Data=data
 
 	this.ServeJSON()
 	return

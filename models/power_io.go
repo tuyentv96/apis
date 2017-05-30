@@ -24,6 +24,18 @@ type GetDevicePowerOneOutput struct {
 	Devices []DevicePowerOne `json:"power_data" bson:"power_data" form:"power_data"`
 }
 
+type PowerOutput struct {
+	Uid string `json:"uid,omitempty" bson:"uid" form:"uid"`
+	Hid string `json:"hid,omitempty" bson:"hid" form:"hid"`
+	Did string `json:"did,omitempty" bson:"did" form:"did"`
+	Dname   string `json:"dname,omitempty" bson:"dname"`
+	Status  int `json:"status,omitempty" bson:"status"`
+	Type  int `json:"type,omitempty" bson:"type"`
+	Total int `json:"total,omitempty" bson:"total" form:"total"`
+	Devices []bson.M `json:"power_data,omitempty" bson:"power_data" form:"power_data"`
+}
+
+
 
 type GetRankingDevicePowerOutput struct {
 	Hid string `json:"hid" bson:"hid" form:"hid"`
