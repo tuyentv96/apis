@@ -59,7 +59,7 @@ func GetDevicePowerLimit(did string,date_skip int64,date_limit int64)  ([]Device
 	y1,m1,d1:=time.Unix(next_day,0).Date()
 	time_from:= time.Date(y1, m1, d1, 0, 0, 0, 0, time.Local)
 
-	fmt.Printf("%+v","now:",date_end,"from:",time_from)
+	fmt.Printf("%+v","now:",time_end,"from:",time_from)
 
 	result:= []DevicePowerOne{}
 
@@ -100,37 +100,295 @@ func GetDevicePowerByTime(did string,date_start int64,date_end int64)  ([]Device
 }
 
 
-func GetHomePowerLimit(hid string,date_skip int64,date_limit int64)  ([]DevicePowerOne,error){
+func GetHomePowerInYearBYMonth(hid string,time_now int64)  (ret []bson.M, err_r error){
 	Db := db.MgoDb{}
 	Db.Init()
 	defer Db.Close()
 
-	var date_end int64=time.Now().Local().Unix()
-	date_end-= (24 * 60 * 60)*date_skip
-	y,m,d:=time.Unix(date_end,0).Date()
-	time_end:= time.Date(y, m, d, 0, 0, 0, 0, time.Local)
 
-	var next_day int64=time.Now().Local().Unix()
-	next_day-= (24 * 60 * 60)*(date_limit+date_skip)
-	y1,m1,d1:=time.Unix(next_day,0).Date()
-	time_from:= time.Date(y1, m1, d1, 0, 0, 0, 0, time.Local)
+	y,_,_:=time.Unix(time_now,0).Local().Date()
+	time_end:= time.Date(y, 12, 31, 23, 59, 59, 0, time.Local)
+	time_from:= time.Date(y, 1, 1, 0, 0, 0, 0, time.Local)
 
-	fmt.Printf("%+v","now:",date_end,"from:",time_from)
+	fmt.Printf("%+v",time_end,time_from,"\n")
 
-	result:= []DevicePowerOne{}
-
-	if err := Db.C("power").Find(bson.M{"hid": hid,
-		"date": bson.M{
-			"$gt": time_from,
-			"$lte": time_end,
+	pipeline := []bson.M{
+		bson.M{
+			"$match": bson.M{"time": bson.M{
+				"$gte": time_from.Unix(),
+				"$lte": time_end.Unix(),
+			},
+				"hid": hid,
+			},
 		},
-	}).Sort("dname").All(&result); err != nil {
-		print("Fail")
-		return result,errors.New("No home_id found")
-
+		bson.M{
+			"$group": bson.M{
+				"_id": bson.M{
+					"month": bson.M{ "$month": "$date" },
+				},
+				"power_total": bson.M{ "$sum": "$power" },
+			},
+		},
+		bson.M{ "$sort": bson.M{ "_id.month": 1 } },
 	}
+	resp := []bson.M{}
 
-	return result,nil
+	err:= Db.C("power").Pipe(pipeline).All(&resp)
+
+	if err != nil {
+		//handle error
+		println("Query fai;")
+	}
+	//fmt.Printf("%+v",resp)
+	return resp,nil
 }
+
+func GetHomePowerInMonthByDate(hid string,time_now int64)  (ret []bson.M, err_r error){
+	Db := db.MgoDb{}
+	Db.Init()
+	defer Db.Close()
+
+	y,m,_:=time.Unix(time_now,0).Local().Date()
+	time_end:= time.Date(y, m, 31, 23, 59, 59, 0, time.Local)
+	time_from:= time.Date(y, m, 1, 0, 0, 0, 0, time.Local)
+
+	fmt.Printf("%+v",time_end,time_from,m,"\n")
+
+	pipeline := []bson.M{
+		bson.M{
+			"$match": bson.M{"time": bson.M{
+				"$gte": time_from.Unix(),
+				"$lte": time_end.Unix(),
+			},
+				"hid": hid,
+			},
+		},
+		bson.M{
+			"$group": bson.M{
+				"_id": bson.M{
+					"date": bson.M{ "$dayOfMonth": "$date" },
+				},
+				"power_total": bson.M{ "$sum": "$power" },
+			},
+		},
+		bson.M{ "$sort": bson.M{ "_id.date": 1 } },
+	}
+	resp := []bson.M{}
+
+	err:= Db.C("power").Pipe(pipeline).All(&resp)
+
+	if err != nil {
+		//handle error
+		println("Query fai;")
+	}
+	//fmt.Printf("%+v",resp)
+	return resp,nil
+}
+
+func GetDevicePowerInMonthByDate(did string,time_now int64)  (ret []bson.M, err_r error){
+	Db := db.MgoDb{}
+	Db.Init()
+	defer Db.Close()
+
+	y,m,_:=time.Unix(time_now,0).Local().Date()
+	time_end:= time.Date(y, m, 31, 23, 59, 59, 0, time.Local)
+	time_from:= time.Date(y, m, 1, 0, 0, 0, 0, time.Local)
+
+	fmt.Printf("%+v",time_end,time_from,m,"\n")
+
+	pipeline := []bson.M{
+		bson.M{
+			"$match": bson.M{"time": bson.M{
+				"$gte": time_from.Unix(),
+				"$lte": time_end.Unix(),
+			},
+				"did": did,
+			},
+		},
+		bson.M{
+			"$group": bson.M{
+				"_id": bson.M{
+					"date": bson.M{ "$dayOfMonth": "$date" },
+				},
+				"power_total": bson.M{ "$sum": "$power" },
+			},
+		},
+		bson.M{ "$sort": bson.M{ "_id.date": 1 } },
+	}
+	resp := []bson.M{}
+
+	err:= Db.C("power").Pipe(pipeline).All(&resp)
+
+	if err != nil {
+		//handle error
+		println("Query fai;")
+	}
+	//fmt.Printf("%+v",resp)
+	return resp,nil
+}
+
+func GetDevicePowerInYearBYMonth(did string,time_now int64)  (ret []bson.M, err_r error){
+	Db := db.MgoDb{}
+	Db.Init()
+	defer Db.Close()
+
+
+	y,_,_:=time.Unix(time_now,0).Local().Date()
+	time_end:= time.Date(y, 12, 31, 23, 59, 59, 0, time.Local)
+	time_from:= time.Date(y, 1, 1, 0, 0, 0, 0, time.Local)
+
+	fmt.Printf("%+v",time_end,time_from,"\n")
+
+	pipeline := []bson.M{
+		bson.M{
+			"$match": bson.M{"time": bson.M{
+				"$gte": time_from.Unix(),
+				"$lte": time_end.Unix(),
+			},
+				"did": did,
+			},
+		},
+		bson.M{
+			"$group": bson.M{
+				"_id": bson.M{
+					"month": bson.M{ "$month": "$date" },
+				},
+				"power_total": bson.M{ "$sum": "$power" },
+			},
+		},
+		bson.M{ "$sort": bson.M{ "_id.month": 1 } },
+	}
+	resp := []bson.M{}
+
+	err:= Db.C("power").Pipe(pipeline).All(&resp)
+
+	if err != nil {
+		//handle error
+		println("Query fai;")
+	}
+	//fmt.Printf("%+v",resp)
+	return resp,nil
+}
+
+
+func GetRankingDevicePowerInMonth(hid string,time_now int64)  (ret []bson.M, err_r error){
+	Db := db.MgoDb{}
+	Db.Init()
+	defer Db.Close()
+
+
+	y,m,_:=time.Unix(time_now,0).Local().Date()
+	time_end:= time.Date(y, m, 31, 23, 59, 59, 0, time.Local)
+	time_from:= time.Date(y, m, 1, 0, 0, 0, 0, time.Local)
+
+	fmt.Printf("%+v",time_end,time_from,"\n")
+
+	pipeline := []bson.M{
+		bson.M{
+			"$match": bson.M{"time": bson.M{
+				"$gte": time_from.Unix(),
+				"$lte": time_end.Unix(),
+			},
+			},
+		},
+		bson.M{
+			"$group": bson.M{
+				"_id":  bson.M{
+					"did": "$did",
+					"hid": "$hid",
+					"dname": "$dname",
+				},
+				"power_total": bson.M{ "$sum": "$power" },
+			},
+		},
+		bson.M{ "$sort": bson.M{ "power_total": -1 } },
+	}
+	resp := []bson.M{}
+
+	err:= Db.C("power").Pipe(pipeline).All(&resp)
+
+	if err != nil {
+		//handle error
+		println("Query fai;")
+	}
+	//fmt.Printf("%+v",resp)
+	return resp,nil
+}
+
+func GetRankingDevicePowerInYear(hid string,time_now int64)  (ret []bson.M, err_r error){
+	Db := db.MgoDb{}
+	Db.Init()
+	defer Db.Close()
+
+
+	y,_,_:=time.Unix(time_now,0).Local().Date()
+	time_end:= time.Date(y, 12, 31, 23, 59, 59, 0, time.Local)
+	time_from:= time.Date(y, 1, 1, 0, 0, 0, 0, time.Local)
+
+	fmt.Printf("%+v",time_end,time_from,"\n")
+
+	pipeline := []bson.M{
+		bson.M{
+			"$match": bson.M{"time": bson.M{
+				"$gte": time_from.Unix(),
+				"$lte": time_end.Unix(),
+			},
+			},
+		},
+		bson.M{
+			"$group": bson.M{
+				"_id":  bson.M{
+					"did": "$did",
+					"hid": "$hid",
+					"dname": "$dname",
+				},
+				"power_total": bson.M{ "$sum": "$power" },
+			},
+		},
+		bson.M{ "$sort": bson.M{ "power_total": -1 } },
+	}
+	resp := []bson.M{}
+
+	err:= Db.C("power").Pipe(pipeline).All(&resp)
+
+	if err != nil {
+		//handle error
+		println("Query fai;")
+	}
+	//fmt.Printf("%+v",resp)
+	return resp,nil
+}
+
+
+func GetRankingDevicePowerAll(hid string)  (ret []bson.M, err_r error){
+	Db := db.MgoDb{}
+	Db.Init()
+	defer Db.Close()
+
+	pipeline := []bson.M{
+		bson.M{
+			"$group": bson.M{
+				"_id":  bson.M{
+					"did": "$did",
+					"hid": "$hid",
+					"dname": "$dname",
+				},
+				"power_total": bson.M{ "$sum": "$power" },
+			},
+		},
+		bson.M{ "$sort": bson.M{ "power_total": -1 } },
+	}
+	resp := []bson.M{}
+
+	err:= Db.C("power").Pipe(pipeline).All(&resp)
+
+	if err != nil {
+		//handle error
+		println("Query fai;")
+	}
+	//fmt.Printf("%+v",resp)
+	return resp,nil
+}
+
 
 

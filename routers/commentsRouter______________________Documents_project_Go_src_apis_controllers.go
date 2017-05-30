@@ -69,6 +69,62 @@ func init() {
 			AllowHTTPMethods: []string{"get"},
 			Params: nil})
 
+	beego.GlobalControllerRouter["apis/controllers:PowerController"] = append(beego.GlobalControllerRouter["apis/controllers:PowerController"],
+		beego.ControllerComments{
+			Method: "GetHomePowerInYear",
+			Router: `/getHomePowerInYear`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:PowerController"] = append(beego.GlobalControllerRouter["apis/controllers:PowerController"],
+		beego.ControllerComments{
+			Method: "GetHomePowerInYearBy",
+			Router: `/getHomePowerInYear`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:PowerController"] = append(beego.GlobalControllerRouter["apis/controllers:PowerController"],
+		beego.ControllerComments{
+			Method: "GetHomePowerInMonthByDate",
+			Router: `/getHomePowerInMonthByDate`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:PowerController"] = append(beego.GlobalControllerRouter["apis/controllers:PowerController"],
+		beego.ControllerComments{
+			Method: "GetDevicePowerInMonthByDate",
+			Router: `/getDevicePowerInMonthByDate`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:PowerController"] = append(beego.GlobalControllerRouter["apis/controllers:PowerController"],
+		beego.ControllerComments{
+			Method: "GetDevicePowerInYearByMonth",
+			Router: `/getDevicePowerInYearByMonth`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:PowerController"] = append(beego.GlobalControllerRouter["apis/controllers:PowerController"],
+		beego.ControllerComments{
+			Method: "GetRankingDevicePowerInMonth",
+			Router: `/getRankingDevicePowerInMonth`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:PowerController"] = append(beego.GlobalControllerRouter["apis/controllers:PowerController"],
+		beego.ControllerComments{
+			Method: "GetRankingDevicePowerInYear",
+			Router: `/getRankingDevicePowerInYear`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
+	beego.GlobalControllerRouter["apis/controllers:PowerController"] = append(beego.GlobalControllerRouter["apis/controllers:PowerController"],
+		beego.ControllerComments{
+			Method: "GetRankingDevicePowerAll",
+			Router: `/getRankingDevicePowerAll`,
+			AllowHTTPMethods: []string{"get"},
+			Params: nil})
+
 	beego.GlobalControllerRouter["apis/controllers:TimerController"] = append(beego.GlobalControllerRouter["apis/controllers:TimerController"],
 		beego.ControllerComments{
 			Method: "Post",
