@@ -35,6 +35,17 @@ type PowerOutput struct {
 	Devices []bson.M `json:"power_data,omitempty" bson:"power_data" form:"power_data"`
 }
 
+type PowerInput struct {
+	Uid string `json:"uid,omitempty" bson:"uid" form:"uid"`
+	Hid string `json:"hid,omitempty" bson:"hid" form:"hid"`
+	Did string `json:"did,omitempty" bson:"did" form:"did"`
+	Time int64 `json:"time,omitempty" bson:"time" form:"time"`
+	Date_Start int64  `json:"date_start,omitempty" bson:"date_start" form:"date_start"`
+	Date_End int64  `json:"date_end,omitempty" bson:"date_end" form:"date_end"`
+	Date_Limit int64  `json:"date_limit,omitempty" bson:"date_limit" form:"date_limit"`
+	Date_Skip int64  `json:"date_skip,omitempty" bson:"date_skip" form:"date_skip"`
+}
+
 
 
 type GetRankingDevicePowerOutput struct {

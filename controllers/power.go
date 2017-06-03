@@ -3,7 +3,6 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	models "apis/models"
-	"strconv"
 )
 
 // Operations about user
@@ -17,15 +16,24 @@ type PowerController struct {
 // @Param	hid	header	string	hid
 // @Success 200
 // @Failure 201
-// @router /getDevice [get]
-func (this *PowerController) GetDevice() {
+// @router /getDevice [post]
+func (this *PowerController) PostGetDevice() {
 	ret_val:= models.Response{Status:true,Rcode:200}
 	this.Data["json"]=&ret_val
 	ret_val.Message="Success"
 
 	uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
-	hid:= this.Ctx.Request.Header.Get("hid")
-	print(hid,uid)
+
+	// Parse input data
+	input_form:=models.PowerInput{}
+	if err:= this.ParseForm(&input_form);err!=nil {
+		ret_val.Rcode=100
+		ret_val.Message=err.Error()
+		this.ServeJSON()
+		return
+	}
+
+	hid:= input_form.Hid
 
 	ldevice,err := models.GetDevicePower(uid,hid)
 
@@ -56,20 +64,25 @@ func (this *PowerController) GetDevice() {
 // @Param	hid	header	string	hid
 // @Success 200
 // @Failure 201
-// @router /getPowerDeviceLimit [get]
-func (this *PowerController) GetPowerDeviceLimit() {
+// @router /getPowerDeviceLimit [post]
+func (this *PowerController) PostGetPowerDeviceLimit() {
 	ret_val:= models.Response{Status:true,Rcode:200}
 	this.Data["json"]=&ret_val
 	ret_val.Message="Success"
 
 	uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
-	did:= this.Ctx.Request.Header.Get("did")
-	limit_str:= this.Ctx.Request.Header.Get("date_limit")
-	skip_str:= this.Ctx.Request.Header.Get("date_skip")
 
-	date_limit,_:= strconv.ParseInt(limit_str,0,64)
-	date_skip,_:= strconv.ParseInt(skip_str,0,64)
-	//print(did,uid,limit)
+	input_form:=models.PowerInput{}
+	if err:= this.ParseForm(&input_form);err!=nil {
+		ret_val.Rcode=100
+		ret_val.Message=err.Error()
+		this.ServeJSON()
+		return
+	}
+
+	date_limit:=input_form.Date_Limit
+	date_skip:=input_form.Date_Skip
+	did:=input_form.Did
 
 	dev,err1:= models.FindDeviceByID(did)
 	if err1!=""{
@@ -113,20 +126,25 @@ func (this *PowerController) GetPowerDeviceLimit() {
 // @Param	hid	header	string	hid
 // @Success 200
 // @Failure 201
-// @router /getPowerDeviceByTime [get]
-func (this *PowerController) GetPowerDeviceByTime() {
+// @router /getPowerDeviceByTime [post]
+func (this *PowerController) PostGetPowerDeviceByTime() {
 	ret_val:= models.Response{Status:true,Rcode:200}
 	this.Data["json"]=&ret_val
 	ret_val.Message="Success"
 
 	uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
-	did:= this.Ctx.Request.Header.Get("did")
 
-	date_start_str:= this.Ctx.Request.Header.Get("datestart")
-	date_end_str:= this.Ctx.Request.Header.Get("dateend")
+	input_form:=models.PowerInput{}
+	if err:= this.ParseForm(&input_form);err!=nil {
+		ret_val.Rcode=100
+		ret_val.Message=err.Error()
+		this.ServeJSON()
+		return
+	}
 
-	date_start,_:= strconv.ParseInt(date_start_str,0,64)
-	date_end,_:= strconv.ParseInt(date_end_str,0,64)
+	date_start:=input_form.Date_Start
+	date_end:=input_form.Date_End
+	did:=input_form.Did
 
 	dev,err1:= models.FindDeviceByID(did)
 	if err1!=""{
@@ -172,23 +190,27 @@ func (this *PowerController) GetPowerDeviceByTime() {
 // @Param	hid	header	string	hid
 // @Success 200
 // @Failure 201
-// @router /getHomePowerInYear [get]
-func (this *PowerController) GetHomePowerInYear() {
+// @router /getHomePowerInYear [post]
+func (this *PowerController) PostGetHomePowerInYear() {
 	ret_val:= models.Response{Status:true,Rcode:200}
 	this.Data["json"]=&ret_val
 	ret_val.Message="Success"
 
 	uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
-	hid:= this.Ctx.Request.Header.Get("hid")
 
-	time_str:= this.Ctx.Request.Header.Get("time")
-	//date_end_str:= this.Ctx.Request.Header.Get("dateend")
+	input_form:=models.PowerInput{}
+	if err:= this.ParseForm(&input_form);err!=nil {
+		ret_val.Rcode=100
+		ret_val.Message=err.Error()
+		this.ServeJSON()
+		return
+	}
 
-	time_in_year,_:= strconv.ParseInt(time_str,0,64)
-	//date_end,_:= strconv.ParseInt(date_end_str,0,64)
+	time:=input_form.Time
+	hid:=input_form.Hid
 
 
-	ldevice,err := models.GetHomePowerInYearBYMonth(hid,time_in_year)
+	ldevice,err := models.GetHomePowerInYearBYMonth(hid,time)
 
 	if err!=nil{
 		ret_val.Rcode=201
@@ -217,23 +239,26 @@ func (this *PowerController) GetHomePowerInYear() {
 // @Param	hid	header	string	hid
 // @Success 200
 // @Failure 201
-// @router /getHomePowerInYear [get]
-func (this *PowerController) GetHomePowerInYearBy() {
+// @router /getHomePowerInYearByMonth [post]
+func (this *PowerController) PostGetHomePowerInYearByMonth() {
 	ret_val:= models.Response{Status:true,Rcode:200}
 	this.Data["json"]=&ret_val
 	ret_val.Message="Success"
 
 	uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
-	hid:= this.Ctx.Request.Header.Get("hid")
+	input_form:=models.PowerInput{}
+	if err:= this.ParseForm(&input_form);err!=nil {
+		ret_val.Rcode=100
+		ret_val.Message=err.Error()
+		this.ServeJSON()
+		return
+	}
 
-	time_str:= this.Ctx.Request.Header.Get("time")
-	//date_end_str:= this.Ctx.Request.Header.Get("dateend")
-
-	time_in_year,_:= strconv.ParseInt(time_str,0,64)
-	//date_end,_:= strconv.ParseInt(date_end_str,0,64)
+	hid:= input_form.Hid
+	time:=input_form.Time
 
 
-	ldevice,err := models.GetHomePowerInYearBYMonth(hid,time_in_year)
+	ldevice,err := models.GetHomePowerInYearBYMonth(hid,time)
 
 	if err!=nil{
 		ret_val.Rcode=201
@@ -262,116 +287,25 @@ func (this *PowerController) GetHomePowerInYearBy() {
 // @Param	hid	header	string	hid
 // @Success 200
 // @Failure 201
-// @router /getHomePowerInMonthByDate [get]
-func (this *PowerController) GetHomePowerInMonthByDate() {
+// @router /getHomePowerInMonthByDate [post]
+func (this *PowerController) PostGetHomePowerInMonthByDate() {
 	ret_val:= models.Response{Status:true,Rcode:200}
 	this.Data["json"]=&ret_val
 	ret_val.Message="Success"
 
 	uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
-	hid:= this.Ctx.Request.Header.Get("hid")
-
-	time_str:= this.Ctx.Request.Header.Get("time")
-	//date_end_str:= this.Ctx.Request.Header.Get("dateend")
-
-	time_in_year,_:= strconv.ParseInt(time_str,0,64)
-	//date_end,_:= strconv.ParseInt(date_end_str,0,64)
-
-
-	ldevice,err := models.GetHomePowerInMonthByDate(hid,time_in_year)
-
-	if err!=nil{
-		ret_val.Rcode=201
+	input_form:=models.PowerInput{}
+	if err:= this.ParseForm(&input_form);err!=nil {
+		ret_val.Rcode=100
 		ret_val.Message=err.Error()
 		this.ServeJSON()
 		return
 	}
-	print(ldevice)
 
-	data:= models.PowerOutput{}
+	hid:= input_form.Hid
+	time:=input_form.Time
 
-	data.Uid=uid
-	data.Total=len(ldevice)
-	data.Devices=ldevice
-
-	ret_val.Data=data
-
-	this.ServeJSON()
-	return
-
-}
-
-
-// @Title get device
-// @Summary get device
-// @Param	auth	header	string	"token"
-// @Param	hid	header	string	hid
-// @Success 200
-// @Failure 201
-// @router /getDevicePowerInMonthByDate [get]
-func (this *PowerController) GetDevicePowerInMonthByDate() {
-	ret_val:= models.Response{Status:true,Rcode:200}
-	this.Data["json"]=&ret_val
-	ret_val.Message="Success"
-
-	uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
-	did:= this.Ctx.Request.Header.Get("did")
-
-	time_str:= this.Ctx.Request.Header.Get("time")
-	//date_end_str:= this.Ctx.Request.Header.Get("dateend")
-
-	time_in_year,_:= strconv.ParseInt(time_str,0,64)
-	//date_end,_:= strconv.ParseInt(date_end_str,0,64)
-
-	println(did,time_in_year)
-
-	ldevice,err := models.GetDevicePowerInMonthByDate(did,time_in_year)
-
-	if err!=nil{
-		ret_val.Rcode=201
-		ret_val.Message=err.Error()
-		this.ServeJSON()
-		return
-	}
-	print(ldevice)
-
-	data:= models.PowerOutput{}
-
-	data.Uid=uid
-	data.Total=len(ldevice)
-	data.Devices=ldevice
-
-	ret_val.Data=data
-
-	this.ServeJSON()
-	return
-
-}
-
-// @Title get device
-// @Summary get device
-// @Param	auth	header	string	"token"
-// @Param	hid	header	string	hid
-// @Success 200
-// @Failure 201
-// @router /getDevicePowerInYearByMonth [get]
-func (this *PowerController) GetDevicePowerInYearByMonth() {
-	ret_val:= models.Response{Status:true,Rcode:200}
-	this.Data["json"]=&ret_val
-	ret_val.Message="Success"
-
-	uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
-	did:= this.Ctx.Request.Header.Get("did")
-
-	time_str:= this.Ctx.Request.Header.Get("time")
-	//date_end_str:= this.Ctx.Request.Header.Get("dateend")
-
-	time_in_year,_:= strconv.ParseInt(time_str,0,64)
-	//date_end,_:= strconv.ParseInt(date_end_str,0,64)
-
-	println(did,time_in_year)
-
-	ldevice,err := models.GetDevicePowerInYearBYMonth(did,time_in_year)
+	ldevice,err := models.GetHomePowerInMonthByDate(hid,time)
 
 	if err!=nil{
 		ret_val.Rcode=201
@@ -401,22 +335,123 @@ func (this *PowerController) GetDevicePowerInYearByMonth() {
 // @Param	hid	header	string	hid
 // @Success 200
 // @Failure 201
-// @router /getRankingDevicePowerInMonth [get]
-func (this *PowerController) GetRankingDevicePowerInMonth() {
+// @router /getDevicePowerInMonthByDate [post]
+func (this *PowerController) PostGetDevicePowerInMonthByDate() {
+	ret_val:= models.Response{Status:true,Rcode:200}
+	this.Data["json"]=&ret_val
+	ret_val.Message="Success"
+
+	uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
+
+	input_form:=models.PowerInput{}
+	if err:= this.ParseForm(&input_form);err!=nil {
+		ret_val.Rcode=100
+		ret_val.Message=err.Error()
+		this.ServeJSON()
+		return
+	}
+
+	time:=input_form.Time
+	did:=input_form.Did
+
+	ldevice,err := models.GetDevicePowerInMonthByDate(did,time)
+
+	if err!=nil{
+		ret_val.Rcode=201
+		ret_val.Message=err.Error()
+		this.ServeJSON()
+		return
+	}
+	print(ldevice)
+
+	data:= models.PowerOutput{}
+
+	data.Uid=uid
+	data.Total=len(ldevice)
+	data.Devices=ldevice
+
+	ret_val.Data=data
+
+	this.ServeJSON()
+	return
+
+}
+
+// @Title get device
+// @Summary get device
+// @Param	auth	header	string	"token"
+// @Param	hid	header	string	hid
+// @Success 200
+// @Failure 201
+// @router /getDevicePowerInYearByMonth [post]
+func (this *PowerController) PostGetDevicePowerInYearByMonth() {
+	ret_val:= models.Response{Status:true,Rcode:200}
+	this.Data["json"]=&ret_val
+	ret_val.Message="Success"
+
+	uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
+
+	input_form:=models.PowerInput{}
+	if err:= this.ParseForm(&input_form);err!=nil {
+		ret_val.Rcode=100
+		ret_val.Message=err.Error()
+		this.ServeJSON()
+		return
+	}
+
+	time:=input_form.Time
+	did:=input_form.Did
+
+	ldevice,err := models.GetDevicePowerInYearBYMonth(did,time)
+
+	if err!=nil{
+		ret_val.Rcode=201
+		ret_val.Message=err.Error()
+		this.ServeJSON()
+		return
+	}
+	print(ldevice)
+
+	data:= models.PowerOutput{}
+
+	data.Uid=uid
+	data.Total=len(ldevice)
+	data.Devices=ldevice
+
+	ret_val.Data=data
+
+	this.ServeJSON()
+	return
+
+}
+
+
+// @Title get device
+// @Summary get device
+// @Param	auth	header	string	"token"
+// @Param	hid	header	string	hid
+// @Success 200
+// @Failure 201
+// @router /getRankingDevicePowerInMonth [post]
+func (this *PowerController) PostGetRankingDevicePowerInMonth() {
 	ret_val:= models.Response{Status:true,Rcode:200}
 	this.Data["json"]=&ret_val
 	ret_val.Message="Success"
 
 	//uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
 
-	time_str:= this.Ctx.Request.Header.Get("time")
-	hid:= this.Ctx.Request.Header.Get("hid")
+	input_form:=models.PowerInput{}
+	if err:= this.ParseForm(&input_form);err!=nil {
+		ret_val.Rcode=100
+		ret_val.Message=err.Error()
+		this.ServeJSON()
+		return
+	}
 
-	time_in_year,_:= strconv.ParseInt(time_str,0,64)
+	time:=input_form.Time
+	hid:=input_form.Hid
 
-	println(time_in_year)
-
-	ldevice,err := models.GetRankingDevicePowerInMonth(hid,time_in_year)
+	ldevice,err := models.GetRankingDevicePowerInMonth(hid,time)
 
 	if err!=nil{
 		ret_val.Rcode=201
@@ -446,22 +481,27 @@ func (this *PowerController) GetRankingDevicePowerInMonth() {
 // @Param	hid	header	string	hid
 // @Success 200
 // @Failure 201
-// @router /getRankingDevicePowerInYear [get]
-func (this *PowerController) GetRankingDevicePowerInYear() {
+// @router /getRankingDevicePowerInYear [post]
+func (this *PowerController) PostGetRankingDevicePowerInYear() {
 	ret_val:= models.Response{Status:true,Rcode:200}
 	this.Data["json"]=&ret_val
 	ret_val.Message="Success"
 
 	//uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
 
-	time_str:= this.Ctx.Request.Header.Get("time")
-	hid:= this.Ctx.Request.Header.Get("hid")
 
-	time_in_year,_:= strconv.ParseInt(time_str,0,64)
+	input_form:=models.PowerInput{}
+	if err:= this.ParseForm(&input_form);err!=nil {
+		ret_val.Rcode=100
+		ret_val.Message=err.Error()
+		this.ServeJSON()
+		return
+	}
 
-	println(time_in_year)
+	time:=input_form.Time
+	hid:=input_form.Hid
 
-	ldevice,err := models.GetRankingDevicePowerInYear(hid,time_in_year)
+	ldevice,err := models.GetRankingDevicePowerInYear(hid,time)
 
 	if err!=nil{
 		ret_val.Rcode=201
@@ -490,16 +530,23 @@ func (this *PowerController) GetRankingDevicePowerInYear() {
 // @Param	hid	header	string	hid
 // @Success 200
 // @Failure 201
-// @router /getRankingDevicePowerAll [get]
-func (this *PowerController) GetRankingDevicePowerAll() {
+// @router /getRankingDevicePowerAll [post]
+func (this *PowerController) PostGetRankingDevicePowerAll() {
 	ret_val:= models.Response{Status:true,Rcode:200}
 	this.Data["json"]=&ret_val
 	ret_val.Message="Success"
 
 	//uid:= GetUidByToken(this.Ctx.Request.Header.Get("auth"))
 
-	//time_str:= this.Ctx.Request.Header.Get("time")
-	hid:= this.Ctx.Request.Header.Get("hid")
+	input_form:=models.PowerInput{}
+	if err:= this.ParseForm(&input_form);err!=nil {
+		ret_val.Rcode=100
+		ret_val.Message=err.Error()
+		this.ServeJSON()
+		return
+	}
+
+	hid:=input_form.Hid
 
 	ldevice,err := models.GetRankingDevicePowerAll(hid)
 

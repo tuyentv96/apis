@@ -19,7 +19,7 @@ func AuthJWT(ctx *context.Context){
 		return []byte("secret123"), nil
 	})
 	if err == nil && token.Valid {
-
+		println("Invalib")
 		return
 
 
