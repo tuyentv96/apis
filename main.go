@@ -16,7 +16,7 @@ func AuthJWT(ctx *context.Context){
 
 	jwtString := ctx.Input.Header("auth")
 	token, err := jwt.Parse(jwtString, func(token *jwt.Token) (interface{}, error) {
-		return []byte("secret123"), nil
+		return []byte("secret1234"), nil
 	})
 	if err == nil && token.Valid {
 		println("Invalib")
